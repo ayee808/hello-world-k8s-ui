@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useState, useEffect } from "react";
 import {
   ChakraProvider,
   Box,
@@ -8,6 +9,7 @@ import {
   Code,
   Grid,
   theme,
+  Heading
 } from "@chakra-ui/react"
 import { ColorModeSwitcher } from "./ColorModeSwitcher"
 import { Logo } from "./Logo"
@@ -19,12 +21,26 @@ export const App = () => (
         <ColorModeSwitcher justifySelf="flex-end" />
         <VStack spacing={8}>
           <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            This is a message from the backend.
-          </Text>
+                    
+          <Response />
           
         </VStack>
       </Grid>
     </Box>
   </ChakraProvider>
 )
+
+
+function Response() {
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:8000/message")
+      .then((res) => res.json())
+      .then((data) => setMessage(data.message));
+  }, []);
+
+  return (
+    <h1>{message}</h1>
+  );
+}
